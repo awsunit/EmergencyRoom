@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"hostpitalQueue","l":"PriorityQueue.ListNode"},{"p":"hostpitalQueue","l":"PriorityQueue"}]

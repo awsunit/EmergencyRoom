@@ -30,7 +30,10 @@ public class PatientVisitGenerator {
 		//System.out.println("interval " + interval + "\n" + "currentTime " + System.currentTimeMillis() );
 		double interval = .2;
 		double d = .3;
-		return new Patient((currentTime + (60000*interval)), u, d);
+		//return new Patient((currentTime + (60000*interval)), u, d);
+		
+		return new Patient.PatientBuilder("jDoe").setEmergencyLevel(1).setArrivalTime(currentTime + 12000).
+					setExamLength(.3).build();
 	}
 
 	/**
@@ -44,29 +47,30 @@ public class PatientVisitGenerator {
 	 * @throws IllegalArgumentException
 	 *             if numberOfRooms is less than 1
 	 */
-	public static PatientVisit getNextProgrammedArrival(double currentTime,
-			int numberOfRooms) {
-
-		if (numberOfRooms < 1) {
-			throw new IllegalArgumentException();
-		}
-
-		int interval = 0;
-
-		if (generatedSoFar >= numberOfRooms) {
-			generatedSoFar = 0;
-			currentUrgency++;
-			if (currentUrgency > 10) {
-				currentUrgency = 1;
-				interval = 20; 
-				// busy time is about 10 / interval * 100 (up to 100%)
-				// It depends on the actual duration, but the above is true for
-				// large durations.
-				// If the interval is less than 10, the waiting time for each
-				// urgency goes up and it is no longer i for urgency i + 1.
-			}
-		}
-		generatedSoFar++;
-		return new PatientVisit(currentTime + interval, currentUrgency, 1);
-	}
+//	public static PatientVisit getNextProgrammedArrival(double currentTime,
+//			int numberOfRooms) {
+//
+//		if (numberOfRooms < 1) {
+//			throw new IllegalArgumentException();
+//		}
+//
+//		int interval = 0;
+//
+//		if (generatedSoFar >= numberOfRooms) {
+//			generatedSoFar = 0;
+//			currentUrgency++;
+//			if (currentUrgency > 10) {
+//				currentUrgency = 1;
+//				interval = 20; 
+//				// busy time is about 10 / interval * 100 (up to 100%)
+//				// It depends on the actual duration, but the above is true for
+//				// large durations.
+//				// If the interval is less than 10, the waiting time for each
+//				// urgency goes up and it is no longer i for urgency i + 1.
+//			}
+//		}
+//		generatedSoFar++;
+//		return new PatientVisit(currentTime + interval, currentUrgency, 1);
+//		return new PatientVisit.PatientVisitBuilder()
+//	}
 }

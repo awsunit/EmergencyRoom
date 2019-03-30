@@ -2,26 +2,108 @@ package hostpitalQueue;
 
 public class Patient extends PriorityQueue<Patient> implements Comparable<Patient>{
 
-	public String name;
+	
+//	public static void main(String [] args) {
+//		Patient p = new PatientBuilder("Todd", 420).setArrivalTime(.10).build();
+//		System.out.println(p);
+//	}
+	/**Patients name*/
+	private String name;
+	/**Used for priority comparison*/
 	private Integer emergencyLevel;
-	private double examLength;
-	private double arrivalTime;
+	/**Duration of exam*/
+	private Double examLength;
+	/**Time arrived at clinic*/
+	private Double arrivalTime;
 	
-	public Patient(String name,Integer eLevel) {
-		this.name = name;
-		this.emergencyLevel = eLevel;
+	public Patient copy() {
+		Patient p = new PatientBuilder(this.name).setEmergencyLevel(this.emergencyLevel).
+				setExamLength(this.examLength).setArrivalTime(this.arrivalTime).build();
+		return p;
 	}
 	
-	//appointmentTime is in milliseconds, examlen comes in as mins, gets converted
-	public Patient(String name,double appointmentTime,int eLevel,double examLen) {
-		this.name = name;
-		this.emergencyLevel = eLevel;
-		this.arrivalTime = (appointmentTime);
-		setExamLength(examLen * 60000);
+	/**
+	 * 
+	 * @param pB the PatientBuilder which creates this
+	 */
+	private Patient(PatientBuilder pB){
+		this.name = pB.name;
+		this.emergencyLevel = pB.emergencyLevel;
+		this.examLength = pB.examLength;
+		this.arrivalTime = pB.arrivalTime;
 	}
-	public Patient(double arrivalTime,int eLevel,double examLength) {
-		this("johnDoe",arrivalTime,eLevel,examLength);
+	
+	/**
+	 * Public builder class to instantiate a Patient Object
+	 * @author newdr
+	 *
+	 */
+	public static class PatientBuilder{
+		/**Patients name*/
+		private String name;
+		/**Used for priority comparison*/
+		private Integer emergencyLevel;
+		/**Duration of exam*/
+		private Double examLength;
+		/**Time arrived at clinic*/
+		private Double arrivalTime;
+		
+		/**
+		 * Construct to create a PatientBuilder, which then can create a Patient with a
+		 * call to build.
+		 * @param name a String that represents this patients name
+		 * @param eLevel the emergency level of this patient
+		 * @throws IllegalArgumentException if name is of length 0 or eLevel is less than 0
+		 */
+		public PatientBuilder(String name) throws IllegalArgumentException{
+			if(name.length() == 0) {
+				throw new IllegalArgumentException("Patient name must have at least one character");
+			}
+			this.name = name;
+			//initialize fields now dummy
+			this.emergencyLevel = 10;
+			this.examLength = 0.0;
+			
+		}
+		/**
+		 * 
+		 * @param eLevel
+		 * @return
+		 */
+		public PatientBuilder setEmergencyLevel(Integer eLevel) {
+			this.emergencyLevel = eLevel;
+			return this;
+		}
+		/**
+		 * 
+		 * @param arrivalTime the time which the patient arrives
+		 * @modifies this
+		 * @effects post method: this.arrivalTime.equals(arrivalTime)
+		 * @return this
+		 */
+		public PatientBuilder setArrivalTime(double arrivalTime) {
+			this.arrivalTime = arrivalTime;
+			return this;
+		}
+		
+		/**
+		 * 
+		 * @param examLength the length of the patients next exam
+		 * @modifies this
+		 * @effects post method: this.examLength.equals(examLength)
+		 * @return this
+		 */
+		public PatientBuilder setExamLength(double examLength) {
+			this.examLength = examLength;
+			return this;
+		}
+		
+		public Patient build(){
+			return new Patient(this);
+		}
 	}
+	
+	
 	
 	public void setExamLength(double examLen) {
 		this.examLength = examLen;
